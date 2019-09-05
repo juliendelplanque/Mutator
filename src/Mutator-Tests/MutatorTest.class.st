@@ -15,6 +15,27 @@ MutatorTest >> tearDown [
 ]
 
 { #category : #test }
+MutatorTest >> testDoubleMutate [
+	| mock mutator |
+	mock := MockObjectWithMethodsToMutate new.
+	mutator := Mutator new
+					mutations: { 
+						MessageSendMutation equalsToNotEquals.
+						LiteralMutation literalValueToMutate: 1 mutatedLiteralValue: 2 };
+					yourself.
+	
+	self deny: mock methodToMutate.
+	
+	mutator mutate: MockObjectWithMethodsToMutate >> #methodToMutate.
+	
+	self deny: mock methodToMutate.
+	
+	mutator cure: MockObjectWithMethodsToMutate >> #methodToMutate.
+	
+	self deny: mock methodToMutate.
+]
+
+{ #category : #test }
 MutatorTest >> testDoubleMutateRaisesError [
 	| mock mutator |
 	mock := MockObjectWithMethodsToMutate new.
